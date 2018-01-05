@@ -19,6 +19,7 @@ use Thujohn\Twitter\Traits\SearchTrait;
 use Thujohn\Twitter\Traits\StatusTrait;
 use Thujohn\Twitter\Traits\TrendTrait;
 use Thujohn\Twitter\Traits\UserTrait;
+use Log;
 
 class Twitter extends tmhOAuth {
 
@@ -118,7 +119,7 @@ class Twitter extends tmhOAuth {
 	{
 		if ($this->debug)
 		{
-			$this->log[] = $message; 
+			$this->log[] = $message;
 		}
 	}
 
@@ -252,6 +253,8 @@ class Twitter extends tmhOAuth {
 			'multipart' => $multipart,
 		]);
 
+		// dump($requestMethod, $name, $url, $multipart);
+
 		$response = $this->response;
 
 		$format = 'object';
@@ -300,6 +303,13 @@ class Twitter extends tmhOAuth {
 			$this->log('ERROR_MSG : '.$error_msg);
 
 			$this->setError($error_code, $error_msg);
+
+			Log::error('Post to Twitter error: ' . json_encode($response));
+			$error_msg = isset($response['error']) ? $response['error'] : json_decode($response['response'])->error;
+
+			if ($response['errno'] == 28) {
+				return 'Operation timed out';
+			}
 
 			throw new RunTimeException('['.$error_code.'] '.$error_msg, $response['code']);
 		}
@@ -450,12 +460,12 @@ class Twitter extends tmhOAuth {
 	{
 		return 'https://twitter.com/intent/tweet?in_reply_to=' . $tweet->id_str;
 	}
-	
+
 	public function error()
 	{
 		return $this->error;
 	}
-	
+
 	public function setError($code, $message)
 	{
 		$this->error = compact('code', 'message');
