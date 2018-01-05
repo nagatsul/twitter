@@ -9,6 +9,12 @@
             "email": "jonathan.thuau@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/nagatsul/twitter"
+        }
+    ],
     "require": {
         "php": ">=5.5.0",
         "illuminate/support": "4.*|5.*",
