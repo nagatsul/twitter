@@ -11,8 +11,8 @@
     ],
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/nagatsul/twitter"
+            "type": "git",
+            "url": "git://github.com/nagatsul/twitter.git"
         }
     ],
     "require": {
