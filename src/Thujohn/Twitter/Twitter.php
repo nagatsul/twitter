@@ -304,14 +304,14 @@ class Twitter extends tmhOAuth {
 
 			$this->setError($error_code, $error_msg);
 
-			Log::error('Post to Twitter error: ' . json_encode($response));
-			$error_msg = isset($response['error']) ? $response['error'] : json_decode($response['response'])->error;
+			// Log::error('Post to Twitter error: ' . json_encode($response));
 
 			if ($response['errno'] == 28) {
+				Log::warning('Twitter query: Operation timed out');
 				return 'Operation timed out';
 			}
 
-			throw new RunTimeException('['.$error_code.'] '.$error_msg, $response['code']);
+			throw new RunTimeException($response['response'], $response['code']);
 		}
 
 		switch ($format)
